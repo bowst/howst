@@ -18,7 +18,6 @@ service "nginx" do
   action [:start, :enable]
 end
 
-
 execute "Copy config file" do
   command "sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/drupal"
   action :run

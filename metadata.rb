@@ -1,4 +1,4 @@
-name             'brag'
+name             'howst'
 maintainer       'Bowst'
 maintainer_email 'ben@bowst.com'
 license          'All rights reserved'

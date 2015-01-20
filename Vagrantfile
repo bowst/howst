@@ -75,11 +75,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
 
     chef.run_list = [
-        "recipe[brag::mysql]",
-        "recipe[brag::php]",
-        "recipe[brag::nginx]",
-        "recipe[brag::drupal]",
-        "recipe[brag::database]"
+        "recipe[howst::mysql]",
+        "recipe[howst::php]",
+        "recipe[howst::nginx]",
+        "recipe[howst::drupal]",
+        "recipe[howst::database]"
     ]
   end
 end

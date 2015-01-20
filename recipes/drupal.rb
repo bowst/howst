@@ -2,7 +2,7 @@ version_7 = "drupal-7.34"
 version_8 = "drupal-8.0.0-beta4"
 project = node["project"]
 
-if node["drual_version"] == 7
+if node["drupal_version"] == 7
   version = version_7
   url = "http://ftp.drupal.org/files/projects/#{version_7}.tar.gz"
 else
