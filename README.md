@@ -1,2 +1,2 @@
-# hōwst
+# Hōwst
 Easy Drupal Setup
