@@ -62,7 +62,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       mysql: {
         server_root_password: 'vagrant'
       },
-      drupal_version: 7,
+      drupal_version: 8,
       project: {
         absolute_document_root: '/var/www/drupal'
       },
@@ -79,7 +79,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "recipe[howst::php]",
         "recipe[howst::nginx]",
         "recipe[howst::drupal]",
-        "recipe[howst::database]"
+        "recipe[howst::database]",
+        "recipe[composer]",
+        "recipe[howst::drush]",
+        "recipe[vim]"
     ]
   end
 end
