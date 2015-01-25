@@ -62,7 +62,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       mysql: {
         server_root_password: 'vagrant'
       },
-      drupal_version: 8,
+      drupal_version: 7,
       project: {
         absolute_document_root: '/var/www/drupal'
       },
@@ -75,11 +75,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
 
     chef.run_list = [
-        "recipe[howst::mysql]",
+#        "recipe[howst::mysql]",
         "recipe[howst::php]",
-        "recipe[howst::nginx]",
-        "recipe[howst::drupal]",
-        "recipe[howst::database]",
+#        "recipe[howst::nginx]",
+#        "recipe[howst::drupal]",
+#        "recipe[howst::database]",
         "recipe[composer]",
         "recipe[howst::drush]",
         "recipe[vim]"

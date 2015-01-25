@@ -6,6 +6,17 @@ else
 end
 
 execute "Adding drush globally" do
+  cwd "/home/vagrant"                                                           
+  user "vagrant" 
+  environment ({'HOME' => '/home/vagrant', 'USER' => 'vagrant'})
   command "composer global require drush/drush:#{drush_version}"
+  action :run
+end
+
+execute "Add Composer's global bin to $PATH" do
+  cwd "/home/vagrant"                                                           
+  user "vagrant" 
+  environment ({'HOME' => '/home/vagrant', 'USER' => 'vagrant'})
+  command "sed -i '1i export PATH=\"$HOME/.composer/vendor/bin:$PATH\"' /home/vagrant/.bashrc"
   action :run
 end
