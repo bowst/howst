@@ -20,3 +20,11 @@ execute "Add Composer's global bin to $PATH" do
   command "sed -i '1i export PATH=\"$HOME/.composer/vendor/bin:$PATH\"' /home/vagrant/.bashrc"
   action :run
 end
+
+remote_directory "/home/vagrant/.drush" do
+  files_mode '777'
+  files_owner 'vagrant'
+  mode '0770'
+  owner 'vagrant'
+  source 'drush'
+end
