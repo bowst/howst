@@ -24,14 +24,11 @@ After your VM is up and running, you'll have a ready-to-go drupal instance based
    * Drupal version #
    * Database config (user, password, host, etc.)
    * Drupal install directory (default to /var/www/drupal)
-   * To configure the port on your local machine you'll visit, change the `host` parameter of the config.vm.network function in the vagrant file.  Defaults to 8080.
-4. Run the following command to bring up your shiny new drupal instance
-   vagrant up
+   * To configure the port on your local machine you'll visit, change the `host` parameter of the config.vm.network function in the vagrant file.  Defaults to `8080`.
+4. Run the following command to bring up your shiny new drupal instance: `vagrant up`
 5. You should now be able to access the drupal install.php for your shiny new instance at localhost:8080 (or whatever port you specified) on your local machine.
-6. ssh-ing is easy.  From the root directory of this repo, simply run the following command
-   vagrant ssh
-7. Drush is already installed - good practice would be to create a local alias for your new drupal site.  You must be wondering...such an onerous task, there must be an easy way to do it.  Well, you're wrong!  Just kidding, it's wicked easy.  Try the command magic below from your drupal install directory.
-   drush site-alias @self --full --with-optional
+6. ssh-ing is easy.  From the root directory of this repo, simply run the following command: `vagrant ssh`
+7. Drush is already installed - good practice would be to create a local alias for your new drupal site.  You must be wondering...such an onerous task, there must be an easy way to do it.  Well, you're wrong!  Just kidding, it's wicked easy.  Try this command magic from your drupal install directory: `drush site-alias @self --full --with-optional`
 8. Get Drupally with it!
 
 ###The Deets
@@ -39,5 +36,5 @@ After your VM is up and running, you'll have a ready-to-go drupal instance based
 * The NGINX config file can be edited in files/default/nginx
 
 ###TODO
-1. Add ability to spin up existing sites using git clone, drush sql-sync, and file proxy module.
+1. Add ability to spin up existing sites using `git clone`, `drush sql-sync`, and file proxy module.
    
