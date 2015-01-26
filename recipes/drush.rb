@@ -21,6 +21,7 @@ execute "Add Composer's global bin to $PATH" do
   action :run
 end
 
+#Copy over any files we want (drush aliases, policy files, etc.)
 remote_directory "/home/vagrant/.drush" do
   files_mode '777'
   files_owner 'vagrant'
