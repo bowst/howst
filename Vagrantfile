@@ -79,7 +79,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "recipe[howst::php]",
         "recipe[howst::nginx]",
         "recipe[howst::drupal]",
-        "recipe[howst::database]"
+        "recipe[howst::database]",
+        "recipe[composer]",
+        "recipe[howst::drush]",
+        "recipe[vim]"
     ]
   end
 end
