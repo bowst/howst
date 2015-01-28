@@ -57,6 +57,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.nfs.map_uid = Process.uid
   config.nfs.map_gid = Process.gid
   
+  #existing site info
+  IS_EXISTING_SITE = false
+  SITE_ALIAS = 'dev' 
+  IS_PANTHEON = true
+  #do NOT include `@` before the alias.  Include alias files in the files/default/drush directory.
+  #NOTE - ensure your settings.php file is configured for this db....this may need further discussion.
+  
+  DOC_ROOT = "/var/www/drupal"
+  
   config.vm.provision :chef_solo do |chef|
     chef.json = {
       mysql: {
@@ -64,13 +73,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       },
       drupal_version: 7,
       project: {
-        absolute_document_root: '/var/www/drupal'
+        absolute_document_root: DOC_ROOT
       },
       database: {
         name: "drupal",
         user: "drupal_user",
-        host: "127.0.0.1",
+        host: '127.0.0.1',
         pass: "develop"
+      },
+      existing: {
+        is_existing: IS_EXISTING_SITE,
+        is_pantheon: IS_PANTHEON
       }
     }
 
@@ -78,11 +91,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "recipe[howst::mysql]",
         "recipe[howst::php]",
         "recipe[howst::nginx]",
-        "recipe[howst::drupal]",
-        "recipe[howst::database]",
         "recipe[composer]",
         "recipe[howst::drush]",
+        "recipe[howst::drupal]",
+        "recipe[howst::database]",
         "recipe[vim]"
     ]
+  end
+  
+  if IS_EXISTING_SITE 
+    #sync the dbs
+    $guest_script = <<-SCRIPT
+      cd #{DOC_ROOT}
+      drush cc drush
+      drush @#{SITE_ALIAS} sql-dump > ~/db.sql
+      drush sql-cli < ~/db.sql --db-url='mysql://root:vagrant@127.0.0.1/drupal'
+    SCRIPT
+    #pull in db
+    config.vm.provision "shell", inline: $guest_script
+    #file should be fine, use stage file proxy  
   end
 end
