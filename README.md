@@ -1,4 +1,15 @@
 # Hōwst
+Easy Drupal Setup
+
+Requirements
+------------
+* Vagrant
+* Vagrant plugins:
+  * vagrant-berkshelf
+  * vagrant-omnibus
+* Chef Development Kit
+
+=======
 ##Easy Drupal Setup
 
 ###Introduction
@@ -31,10 +42,15 @@ After your VM is up and running, you'll have a ready-to-go drupal instance based
 7. Drush is already installed - good practice would be to create a local alias for your new drupal site.  You must be wondering...such an onerous task, there must be an easy way to do it.  Well, you're wrong!  Just kidding, it's wicked easy.  Try this command magic from your drupal install directory: `drush site-alias @self --full --with-optional`
 8. Get Drupally with it!
 
+
+###MySQL Notes
+------------
+* To login into mysql, specify the host. For example:
+    mysql -h 127.0.0.1 -u root -p
+
 ###The Deets
 * Any files in the files/default/drush directory will be copied to the ~/.drush directory on the VM instance.  This is super handy for drush aliases, policy files, etc.  I've included a drush policy file attempting to ensure staging and prod dbs are not overwritten by foolish tooks.
 * The NGINX config file can be edited in files/default/nginx
 
 ###TODO
 1. Add ability to spin up existing sites using `git clone`, `drush sql-sync`, and file proxy module.
-   
