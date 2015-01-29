@@ -41,12 +41,14 @@ After your VM is up and running, you'll have a ready-to-go drupal instance based
 2. You should now be able to access the drupal install.php for your shiny new instance at localhost:8080 (or whatever port you specified) on your local machine.  Good for you!
 ####Existing Projects
 1. For existing projects, you'll need to specify the following variables BEFORE you run vagrant up:
-   ```ruby
-      IS_EXISTING_SITE #boolean, yes or no....pretty straightforward
-      GIT_REPO #string, the git repo URI. Be sure it is ONLY the URI
-      SITE_ALIAS #string, Drush Site alias (excluding '@') for the existing instance.  The drush alias file should be included in files/default/drush
-      IS_PANTHEON #boolean, If existing instance is hosted on Pantheon.  This is important as pantheon doesn't support the latest version of drush
-   ```
+
+```ruby
+   IS_EXISTING_SITE #boolean, yes or no....pretty straightforward
+   GIT_REPO #string, the git repo URI. Be sure it is ONLY the URI
+   SITE_ALIAS #string, Drush Site alias (excluding '@') for the existing instance.  The drush alias file should be included in files/default/drush
+   IS_PANTHEON #boolean, If existing instance is hosted on Pantheon.  This is important as pantheon doesn't support the latest version of drush
+```
+
 2. You'll also need to ensure that the site/code directory is completely empty.  Otherwise the git clone will fail.
 3. Lastly, you'll need to ensure that you're settings.php file in the repo will point to the configured db on the VM.
 3. Ok, finally!  Now you can `vagrant up`
