@@ -36,9 +36,11 @@ After your VM is up and running, you'll have a ready-to-go drupal instance based
    * Database config (user, password, host, etc.)
    * Drupal install directory (default to /var/www/drupal)
    * To configure the port on your local machine you'll visit, change the `host` parameter of the config.vm.network function in the vagrant file.  Defaults to `8080`.
+   
 ###New Projects
 1. You've got it easy!  Run the following command to bring up your shiny new drupal instance: `vagrant up`
 2. You should now be able to access the drupal install.php for your shiny new instance at localhost:8080 (or whatever port you specified) on your local machine.  Good for you!
+
 ###Existing Projects
 1. For existing projects, you'll need to specify the following variables BEFORE you run vagrant up:
 
