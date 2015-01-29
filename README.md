@@ -52,6 +52,7 @@ After your VM is up and running, you'll have a ready-to-go drupal instance based
 ```
 
 2. You'll also need to ensure that the site/code directory is completely empty.  Otherwise the git clone will fail.
+3. Be sure the drush site alias file in `files/drush` contains the alias you specifiy in the `Vagrantfile`
 3. Lastly, you'll need to ensure that you're settings.php file in the repo will point to the configured db on the VM.
 3. Ok, finally!  Now you can `vagrant up`
 4. If there are no errors, you're almost there!  Just ssh into the VM using `vagrant ssh`, then run the `pull-db` command to recreate the db. This can be used anytime from anywhere in the VM.
