@@ -57,18 +57,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.nfs.map_uid = Process.uid
   config.nfs.map_gid = Process.gid
   
-  #config info
+  #CONFIGURATION OPTIONS
   DOC_ROOT = "/var/www/drupal"
   DB = "drupal"
   DB_USER = "drupal_user"
   DB_HOST = "127.0.0.1"
   DB_PASS = "develop"
+  DB_ROOT_PASS = 'vagrant'
   
   #THIS IS FOR EXISTING SITES ONLY
   #Do NOT include `@` before the alias.  Include alias files in the files/default/drush directory.
   #NOTE - ensure your settings.php file is configured for the db info below.
-  IS_EXISTING_SITE = true
-  GIT_REPO = 'ssh://codeserver.dev.0774ae1e-50bd-4d52-9bc6-38b75b65ff75@codeserver.dev.0774ae1e-50bd-4d52-9bc6-38b75b65ff75.drush.in:2222/~/repository.git'
+  IS_EXISTING_SITE = false
+  GIT_REPO = '<GIT REPO URI>'
   SITE_ALIAS = 'dev' 
   IS_PANTHEON = true
   
@@ -81,8 +82,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
     #pull down the db
     $guest_script = <<-SCRIPT
+      echo "Pulling Remote Database..."
       drush @#{SITE_ALIAS} sql-dump | tail -n +2 > /home/vagrant/db.sql
-      drush sql-cli < /home/vagrant/db.sql --db-url='mysql://root:vagrant@127.0.0.1/drupal'
+      echo "Updating local Database..."
+      drush sql-cli < /home/vagrant/db.sql --db-url='mysql://root:#{DB_ROOT_PASS}@#{DB_HOST}/#{DB_PASS}'
+      echo 'Database pulled successfully!'
     SCRIPT
     #create db script
     config.vm.provision "shell", inline: "echo \"#{$guest_script}\" > /home/vagrant/pull-db.sh"
@@ -93,11 +97,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #file should be fine, use stage file proxy  
   end
   
+  
+  #update packages
+  config.vm.provision "shell", inline: "sudo apt-get update"
+  
   #Provision Dependency Stack
   config.vm.provision :chef_solo do |chef|
     chef.json = {
       mysql: {
-        server_root_password: 'vagrant'
+        server_root_password: DB_ROOT_PASS
       },
       drupal_version: 7,
       project: {
