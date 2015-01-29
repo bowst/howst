@@ -1,10 +1,11 @@
+project = node["project"]
+site_path = project[:absolute_document_root]
 
 if !node['existing']['is_existing']
   #Install a new instance of drupal
   
   version_7 = "drupal-7.34"
   version_8 = "drupal-8.0.0-beta4"
-  project = node["project"]
 
   if node["drupal_version"] == 7
     version = version_7
@@ -13,8 +14,6 @@ if !node['existing']['is_existing']
     version = version_8
     url = "http://ftp.drupal.org/files/projects/#{version_8}.tar.gz"
   end
-
-  site_path = project[:absolute_document_root]
 
   execute "Downloading Drupal Source" do
     command "wget #{url}"
@@ -36,32 +35,31 @@ if !node['existing']['is_existing']
     action :run
     not_if do File.exists?(File.join(site_path, "#{version}.tar.gz")) end
   end
-
-  execute "Create .exists file" do
-    command "touch #{ File.join(site_path, '.exists') }"
-    cwd site_path
-    action :run
-  end
-
+  
   execute "Copy settings file" do
     command "sudo cp sites/default/default.settings.php sites/default/settings.php"
     cwd site_path
     action :run
     not_if  do File.exists?(File.join(site_path, "sites/default/settings.php")) end
   end
+end
 
-  execute "Set permissions" do
-    command "sudo chmod a+w #{File.join(site_path, "sites/default/settings.php")}"
-    cwd site_path
-    action :run
-  end
+execute "Create .exists file" do
+  command "touch #{ File.join(site_path, '.exists') }"
+  cwd site_path
+  action :run
+end
 
-  execute "Set additional permissions" do
-    command "sudo chmod a+w #{File.join(site_path, "sites/default")}"
-    cwd site_path
-    action :run
-  end
-  
+execute "Set permissions" do
+  command "sudo chmod a+w #{File.join(site_path, "sites/default/settings.php")}"
+  cwd site_path
+  action :run
+end
+
+execute "Set additional permissions" do
+  command "sudo chmod a+w #{File.join(site_path, "sites/default")}"
+  cwd site_path
+  action :run
 end
 
 execute "Change the owner" do

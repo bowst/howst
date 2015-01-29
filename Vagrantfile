@@ -57,15 +57,43 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.nfs.map_uid = Process.uid
   config.nfs.map_gid = Process.gid
   
-  #existing site info
-  IS_EXISTING_SITE = false
+  #config info
+  DOC_ROOT = "/var/www/drupal"
+  DB = "drupal"
+  DB_USER = "drupal_user"
+  DB_HOST = "127.0.0.1"
+  DB_PASS = "develop"
+  
+  #THIS IS FOR EXISTING SITES ONLY
+  #Do NOT include `@` before the alias.  Include alias files in the files/default/drush directory.
+  #NOTE - ensure your settings.php file is configured for the db info below.
+  IS_EXISTING_SITE = true
+  GIT_REPO = 'ssh://codeserver.dev.0774ae1e-50bd-4d52-9bc6-38b75b65ff75@codeserver.dev.0774ae1e-50bd-4d52-9bc6-38b75b65ff75.drush.in:2222/~/repository.git'
   SITE_ALIAS = 'dev' 
   IS_PANTHEON = true
-  #do NOT include `@` before the alias.  Include alias files in the files/default/drush directory.
-  #NOTE - ensure your settings.php file is configured for this db....this may need further discussion.
   
-  DOC_ROOT = "/var/www/drupal"
   
+  #STEP TO PREP FOR EXISTING SITES
+  if IS_EXISTING_SITE 
+    #Pull existing REPO
+    config.vm.provision :host_shell do |host_shell|
+        host_shell.inline = "git clone #{GIT_REPO} #{File.join(Dir.pwd, 'site/code')}" 
+    end
+    #pull down the db
+    $guest_script = <<-SCRIPT
+      drush @#{SITE_ALIAS} sql-dump | tail -n +2 > /home/vagrant/db.sql
+      drush sql-cli < /home/vagrant/db.sql --db-url='mysql://root:vagrant@127.0.0.1/drupal'
+    SCRIPT
+    #create db script
+    config.vm.provision "shell", inline: "echo \"#{$guest_script}\" > /home/vagrant/pull-db.sh"
+    #add script as command
+    config.vm.provision "shell", inline: "echo \"alias pull-db='sh /home/vagrant/pull-db.sh'\" >> /home/vagrant/.bashrc"
+    #make the drupal root the landing directory
+    config.vm.provision "shell", inline: "echo \"cd /var/www/drupal\" >> /home/vagrant/.bashrc"
+    #file should be fine, use stage file proxy  
+  end
+  
+  #Provision Dependency Stack
   config.vm.provision :chef_solo do |chef|
     chef.json = {
       mysql: {
@@ -76,10 +104,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         absolute_document_root: DOC_ROOT
       },
       database: {
-        name: "drupal",
-        user: "drupal_user",
-        host: '127.0.0.1',
-        pass: "develop"
+        name: DB,
+        user: DB_USER,
+        host: DB_HOST,
+        pass: DB_PASS
       },
       existing: {
         is_existing: IS_EXISTING_SITE,
@@ -92,23 +120,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "recipe[howst::php]",
         "recipe[howst::nginx]",
         "recipe[composer]",
-        "recipe[howst::drush]",
+        "recipe[git]",
         "recipe[howst::drupal]",
         "recipe[howst::database]",
-        "recipe[vim]"
+        "recipe[vim]",
+        "recipe[howst::drush]"
     ]
-  end
-  
-  if IS_EXISTING_SITE 
-    #sync the dbs
-    $guest_script = <<-SCRIPT
-      cd #{DOC_ROOT}
-      drush cc drush
-      drush @#{SITE_ALIAS} sql-dump > ~/db.sql
-      drush sql-cli < ~/db.sql --db-url='mysql://root:vagrant@127.0.0.1/drupal'
-    SCRIPT
-    #pull in db
-    config.vm.provision "shell", inline: $guest_script
-    #file should be fine, use stage file proxy  
   end
 end

@@ -22,5 +22,5 @@ site/code/*
 
 .DS_Store
 
-#ignore drush-aliases - comment this line out when used for project
-files/default/drush/*
+#ignore drush-aliases - policy files should be suffixed with the *.inc extension
+files/default/drush/*.php
