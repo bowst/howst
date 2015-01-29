@@ -1,5 +1,5 @@
 #only do this it's not pantheon
-if node['existing']['is_pantheon']
+if !node['existing']['is_pantheon']
   #Copy appropriate composer.json depending on drupal version - edit the appropriate file in files/composer to change
   if node["drupal_version"] == 7
     drush_version = "6.*"
