@@ -64,7 +64,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   DB_HOST = "127.0.0.1"
   DB_PASS = "develop"
   DB_ROOT_PASS = 'vagrant'
-  DRUPAL_VERSION = 7
+  DRUPAL_VERSION = 8
   IS_EXISTING_SITE = false
   
   #THIS IS FOR EXISTING SITES ONLY
@@ -108,7 +108,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       mysql: {
         server_root_password: DB_ROOT_PASS
       },
-      drupal_version: DRUPAL_VERSIONs,
+      drupal_version: DRUPAL_VERSION,
       project: {
         absolute_document_root: DOC_ROOT
       },
