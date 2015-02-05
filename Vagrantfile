@@ -64,7 +64,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   DB_HOST = "127.0.0.1"
   DB_PASS = "develop"
   DB_ROOT_PASS = 'vagrant'
-  DRUPAL_VERSION = 8
+  DRUPAL_VERSION = 7
   IS_EXISTING_SITE = false
   
   #THIS IS FOR EXISTING SITES ONLY
@@ -72,7 +72,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #NOTE - ensure your settings.php file is configured for the db info below.
   GIT_REPO = '<GIT REPO URI>'
   SITE_ALIAS = 'dev' 
-  IS_PANTHEON = true
+  IS_PANTHEON = false
   
   
   #STEP TO PREP FOR EXISTING SITES
@@ -86,7 +86,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       echo "Pulling Remote Database..."
       drush @#{SITE_ALIAS} sql-dump | tail -n +2 > /home/vagrant/db.sql
       echo "Updating local Database..."
-      drush sql-cli < /home/vagrant/db.sql --db-url='mysql://root:#{DB_ROOT_PASS}@#{DB_HOST}/#{DB_PASS}'
+      drush sql-cli < /home/vagrant/db.sql --db-url='mysql://root:#{DB_ROOT_PASS}@#{DB_HOST}/#{DB}'
       echo 'Database pulled successfully!'
     SCRIPT
     #create db script
